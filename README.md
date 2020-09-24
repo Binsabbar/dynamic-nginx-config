@@ -18,9 +18,9 @@ I used to setup nginx manually by sshing into the LB and add or remove hosts. It
 
 ## So what's the solution?
 
-I wanted to create my own script that generates nginx conf files on the fly and add that to my cicd pipeline. However, I did want to re-invent the wheel, hence, I started looking around and found this tool (confd)[https://github.com/kelseyhightower/confd] made by @kelseyhightower. 
+I wanted to create my own script that generates nginx conf files on the fly and add that to my cicd pipeline. However, I did want to re-invent the wheel, hence, I started looking around and found this tool [confd](https://github.com/kelseyhightower/confd) made by [@kelseyhightower](https://github.com/kelseyhightower). 
 
-It is simple. Create a template and data source, and let `confd` do the rest for you! I won't go deep into how it works, you can read that (here)[https://github.com/kelseyhightower/confd/blob/master/docs/quick-start-guide.md]. There are three main files you need:
+It is simple. Create a template and data source, and let `confd` do the rest for you! I won't go deep into how it works, you can read that [here](https://github.com/kelseyhightower/confd/blob/master/docs/quick-start-guide.md). There are three main files you need:
 
 1. template file to render (in `./templates`)
 2. template resource config file (in `./confd`): basically tells `confd` 
