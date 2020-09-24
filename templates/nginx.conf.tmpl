@@ -1,0 +1,38 @@
+{{- $domain := getv "/domain"}}
+{{- $proxy_pass := getv "/proxy_pass"}}
+{{- $upstream_port := getv "/upstream_port" -}}
+upstream {{$proxy_pass}} {
+  {{- range getvs "/upstream/*"}}
+  server {{.}};{{end}}
+}
+
+{{$domain_names := getvs "/domains/*" -}}
+server {
+    server_name  {{range $domain_names}}{{.}}.{{$domain}} {{end -}};
+    listen 80;
+    access_log /var/log/nginx/{{$proxy_pass}}-access.log;
+    return 301 https://$host$request_uri;
+}
+
+server {
+    server_name {{range $domain_names}}{{.}}.{{$domain}} {{end}};
+
+    listen 443 ssl;
+    ssl_certificate     {{ getv "/ssl_cert_path"}};
+    ssl_certificate_key {{ getv "/ssl_key_path"}};
+
+    access_log /var/log/nginx/{{$proxy_pass}}-access.log;
+
+    location / {
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_redirect off;
+        proxy_connect_timeout       600;
+        proxy_send_timeout          600;
+        proxy_read_timeout          600;
+        send_timeout                600;
+        proxy_pass        http://{{$proxy_pass}}:{{$upstream_port}};
+    }
+}

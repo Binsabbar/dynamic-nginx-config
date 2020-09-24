@@ -1,0 +1,32 @@
+backend-1:
+  upstream: ['ios-backend']
+  proxy_pass: ios-backend
+  upstream_port: 9001
+  domains:
+    - api
+    - authentication
+    - media
+  ssl_cert_path: /etc/ssl/ios.cert.pem
+  ssl_key_path: /etc/ssl/ios.key.pem
+  domain: example.com
+
+backend-2:
+  upstream: ['android-backend']
+  proxy_pass: android-backend
+  upstream_port: 8080
+  domains:
+    - jdk
+    - certs
+  ssl_cert_path: /etc/ssl/android.cert.pem
+  ssl_key_path: /etc/ssl/android.key.pem
+  domain: example.com
+
+common-backends:
+  upstream: ['backend-3', 'backend-4']
+  proxy_pass: common-backends
+  upstream_port: 8000
+  domains:
+    - common
+  ssl_cert_path: /etc/ssl/internal.cert.pem
+  ssl_key_path: /etc/ssl/internal.key.pem
+  domain: example.internal

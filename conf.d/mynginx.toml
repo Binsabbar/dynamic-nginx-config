@@ -1,0 +1,11 @@
+[template]
+src = "nginx.conf.tmpl"
+dest = "./nginx.conf"
+keys = [
+  "/upstream",
+  "/proxy_pass",
+  "/domain",
+  "/domains",
+  "/ssl_cert_path",
+  "/ssl_key_path",
+]
